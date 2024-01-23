@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const filePaths = ['cipher.txt', 'text1.txt'];
+const filePaths = ['cipher.txt', 'text1.txt', 'text2.txt'];
 
 function removeUnwanted(content) {
     const removeNumPattern = /[0-9]/g;
