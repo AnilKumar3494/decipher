@@ -43,7 +43,7 @@ def processFile(file_path):
 
             print(f"Total Characters: {total_character_count}\n")
 
-        else:  # Handle the case for cipher.txt
+        else:
             character_freq = alphabetCount(modifiedText)
             total_character_count = sum(freq for char, freq in character_freq)
 
