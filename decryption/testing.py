@@ -1,11 +1,4 @@
 import re
-from collections import Counter
-
-file_paths = [
-    "decryption/cipher.txt",
-    "decryption/text1.txt",
-    "decryption/text2.txt",
-]
 
 
 def removeUnwanted(content):
@@ -16,68 +9,82 @@ def removeUnwanted(content):
 
 
 def alphabetCount(reqText):
-    character_freq = Counter(reqText)
+    character_freq = {}
+    for char in reqText:
+        if char in character_freq:
+            character_freq[char] += 1
+        else:
+            character_freq[char] = 1
     sorted_res = sorted(character_freq.items(), key=lambda x: (x[1], x[0]))
     return sorted_res
 
 
-def replaceCharacters(cipher_text, text1, text2):
-    text = removeUnwanted(text1 + text2)
-    text_freq = Counter(text)
-
-    replaced_text = ""
-    for char in cipher_text:
-        if char.isalpha():
-            least_freq_char = min(text_freq, key=text_freq.get)
-            replaced_text += least_freq_char
-            text_freq[least_freq_char] += 1
-        else:
-            replaced_text += char
-
-    return replaced_text
+def findKey(cipher_freq, ref_freq):
+    key = {}
+    for cipher_char, _ in cipher_freq:
+        ref_char, _ = ref_freq.pop(0)
+        key[cipher_char] = ref_char
+    return key
 
 
-def processFile(file_path):
-    try:
+def decrypt(ciphertext, key):
+    return "".join(key.get(char, char) for char in ciphertext)
+
+
+file_paths = [
+    "decryption/cipher.txt",
+    "decryption/text1.txt",
+    "decryption/text2.txt",
+]
+
+# Dictionary to store the character frequencies for reference
+ref_freq_dict = {}
+
+try:
+    for file_path in file_paths:
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
             modifiedText = removeUnwanted(content)
+            character_freq = alphabetCount(modifiedText)
 
-            if file_path != "cipher.txt":
-                character_freq = alphabetCount(modifiedText)
-                total_character_count = sum(freq for char, freq in character_freq)
+            total_character_count = sum(freq for char, freq in character_freq)
 
-                print(f"For file: '{file_path}' - ")
+            print(f"For file: '{file_path}' - ")
+            for char, freq in character_freq:
+                print(f"{char}: {freq}")
 
-                for char, freq in character_freq:
-                    print(f"{char}: {freq}")
+            print(f"Total Characters: {total_character_count}\n")
 
-                print(f"Total Characters: {total_character_count}\n")
+            if file_path != "decryption/cipher.txt":
+                # Store the character frequencies for the reference text
+                ref_freq_dict[file_path] = character_freq
 
-            else:
-                character_freq = alphabetCount(modifiedText)
-                total_character_count = sum(freq for char, freq in character_freq)
+    # Get the reference frequencies for text1.txt
+    if "decryption/text1.txt" in ref_freq_dict:
+        ref_freq = ref_freq_dict["decryption/text1.txt"]
+    else:
+        raise ValueError("Reference frequencies for text1.txt not found.")
 
-                print(f"For file: '{file_path}' - ")
+    # Find the key to decrypt the ciphertext
+    cipher_freq = ref_freq_dict["decryption/cipher.txt"]
+    key = findKey(cipher_freq, ref_freq)
 
-                for char, freq in character_freq:
-                    print(f"{char}: {freq}")
+    print("Recovery Key:")
+    for cipher_char, plain_char in key.items():
+        print(f"{cipher_char} -> {plain_char}")
 
-                print(f"Total Characters: {total_character_count}\n")
+    # Decrypt the ciphertext using the key
+    ciphertext_path = "decryption/cipher.txt"
+    with open(ciphertext_path, "r", encoding="utf-8") as cipher_file:
+        ciphertext = removeUnwanted(cipher_file.read())
+        plaintext = decrypt(ciphertext, key)
 
-                # Replace characters in 'cipher.txt'
-                decrypted_msg = replaceCharacters(
-                    modifiedText,
-                    open("text1.txt", encoding="utf-8").read(),
-                    open("text2.txt", encoding="utf-8").read(),
-                )
-                print(f"Decrypted Message: {decrypted_msg}\n")
+    print("\nRecovered Plaintext:")
+    print(plaintext)
 
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-
-    return
-
-
-for file_path in file_paths:
-    processFile(file_path)
+except FileNotFoundError as e:
+    print(f"Error: {e}. Check the file paths.")
+except ValueError as e:
+    print(f"Error: {e}")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
