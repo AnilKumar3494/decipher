@@ -60,7 +60,7 @@ try:
                 ref_freq_dict[file_path] = character_freq
 
     # reference frequencies for alpabet
-    ref_freq_dict["decryption/text1.txt"] = alphabetCount("ETAOINSHRDLCUMWFGYPBVKJXQZ")
+    ref_freq_dict["decryption/text1.txt"] = alphabetCount("EINATOSRDLCMHFGUPVYBKWZXJQ")
 
     # Find the key to decrypt the ciphertext
     cipher_freq = ref_freq_dict["decryption/cipher.txt"]
@@ -77,7 +77,7 @@ try:
         ciphertext = removeUnwanted(cipher_file.read())
         plaintext = decrypt(ciphertext, key)
 
-    print("\nRecovered Plaintext:")
+    print("\nPlaintext I tried to recover but doesn't seem like it worked:")
     print(plaintext)
 
 except FileNotFoundError as e:
