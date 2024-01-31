@@ -1,7 +1,11 @@
 import re
 from collections import Counter
 
-file_paths = ["cipher.txt", "text1.txt", "text2.txt"]
+file_paths = [
+    "decryption/cipher.txt",
+    "decryption/text1.txt",
+    "decryption/text2.txt",
+]
 
 
 def removeUnwanted(content):
@@ -34,39 +38,43 @@ def replaceCharacters(cipher_text, text1, text2):
 
 
 def processFile(file_path):
-    with open(file_path, "r", encoding="utf-8") as file:
-        content = file.read()
-        modifiedText = removeUnwanted(content)
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            content = file.read()
+            modifiedText = removeUnwanted(content)
 
-        if file_path != "cipher.txt":
-            character_freq = alphabetCount(modifiedText)
-            total_character_count = sum(freq for char, freq in character_freq)
+            if file_path != "cipher.txt":
+                character_freq = alphabetCount(modifiedText)
+                total_character_count = sum(freq for char, freq in character_freq)
 
-            print(f"For file: '{file_path}' - ")
+                print(f"For file: '{file_path}' - ")
 
-            for char, freq in character_freq:
-                print(f"{char}: {freq}")
+                for char, freq in character_freq:
+                    print(f"{char}: {freq}")
 
-            print(f"Total Characters: {total_character_count}\n")
+                print(f"Total Characters: {total_character_count}\n")
 
-        else:
-            character_freq = alphabetCount(modifiedText)
-            total_character_count = sum(freq for char, freq in character_freq)
+            else:
+                character_freq = alphabetCount(modifiedText)
+                total_character_count = sum(freq for char, freq in character_freq)
 
-            print(f"For file: '{file_path}' - ")
+                print(f"For file: '{file_path}' - ")
 
-            for char, freq in character_freq:
-                print(f"{char}: {freq}")
+                for char, freq in character_freq:
+                    print(f"{char}: {freq}")
 
-            print(f"Total Characters: {total_character_count}\n")
+                print(f"Total Characters: {total_character_count}\n")
 
-            # Replace characters in 'cipher.txt'
-            decrypted_msg = replaceCharacters(
-                modifiedText,
-                open("text1.txt", encoding="utf-8").read(),
-                open("text2.txt", encoding="utf-8").read(),
-            )
-            print(f"Decrypted Message: {decrypted_msg}\n")
+                # Replace characters in 'cipher.txt'
+                decrypted_msg = replaceCharacters(
+                    modifiedText,
+                    open("text1.txt", encoding="utf-8").read(),
+                    open("text2.txt", encoding="utf-8").read(),
+                )
+                print(f"Decrypted Message: {decrypted_msg}\n")
+
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
 
     return
 

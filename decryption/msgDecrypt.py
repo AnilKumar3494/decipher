@@ -1,6 +1,10 @@
 import re
 
-file_paths = ["cipher.txt", "text1.txt", "text2.txt"]
+file_paths = [
+    "decryption/cipher.txt",
+    "decryption/text1.txt",
+    "decryption/text2.txt",
+]
 
 
 # function to removing everhing except the alphabet and then convter to upper case
