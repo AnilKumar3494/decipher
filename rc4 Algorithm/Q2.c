@@ -71,7 +71,7 @@ int main() {
 
     // After generating the first 1000 bytes of keystream - generates the next 900 bytes of keystream and prints the state of the permutation array
     printf("c. Permutation S after generating the first 1000 bytes of keystream:\n");
-    for (int k = 0; k < 1000; k++) {
+    for (int k = 0; k < 900; k++) {
         rc4_keystream_generation(S, &i, &j);
     }
     for (int row = 0; row < 16; row++) {

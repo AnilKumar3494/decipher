@@ -32,9 +32,9 @@ def decrypt(ciphertext, key):
 
 
 file_paths = [
-    "decryption/cipher.txt",
-    "decryption/text1.txt",
-    "decryption/text2.txt",
+    "decryption\q1cipher.txt",
+    "decryption\q1text1.txt",
+    "decryption\q1text2.txt",
 ]
 
 # Dictionary to store the character frequencies for reference
@@ -55,16 +55,18 @@ try:
 
             print(f"Total Characters: {total_character_count}\n")
 
-            if file_path == "decryption/cipher.txt":
+            if file_path == "decryption\q1cipher.txt":
                 # Store the character frequencies for the ciphertext for later use
                 ref_freq_dict[file_path] = character_freq
 
     # reference frequencies for alpabet
-    ref_freq_dict["decryption/text1.txt"] = alphabetCount("EINATOSRDLCMHFGUPVYBKWZXJQ")
+    ref_freq_dict["decryption\q1text1.txt"] = alphabetCount(
+        "EINATOSRDLCMHFGUPVYBKWZXJQ"
+    )
 
     # Find the key to decrypt the ciphertext
-    cipher_freq = ref_freq_dict["decryption/cipher.txt"]
-    ref_freq = ref_freq_dict["decryption/text1.txt"]
+    cipher_freq = ref_freq_dict["decryption\q1cipher.txt"]
+    ref_freq = ref_freq_dict["decryption\q1text1.txt"]
     key = findKey(cipher_freq, ref_freq)
 
     print("Recovery Key:")
@@ -72,7 +74,7 @@ try:
         print(f"{cipher_char} -> {plain_char}")
 
     # Decrypt the ciphertext using the key
-    ciphertext_path = "decryption/cipher.txt"
+    ciphertext_path = "decryption\q1cipher.txt"
     with open(ciphertext_path, "r", encoding="utf-8") as cipher_file:
         ciphertext = removeUnwanted(cipher_file.read())
         plaintext = decrypt(ciphertext, key)
